@@ -16,4 +16,4 @@ def hello(request):
 
 def login(request):
     #return HttpResponse('<h1>Welcome to Login page!!</h1>')
-    return render(request, 'login.html')
+    return render(request, 'reportapp/login.html')
