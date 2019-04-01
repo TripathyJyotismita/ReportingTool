@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report Generation</title>
+</head>
+    <h1>Welcome to Report Generation Tool</h1>
+    <form method="post" action="/Tests/Post/">
+        <fieldset>
+            <legend>Enter details to generate report: </legend>
+            <p>
+                <label> Customer Name/SID:</label>
+                <input type="text" id="myText" value=" " > <br>
+            </p>
+            <p>
+                <h3> Filter by:</h3>
+                <h5> <input type="radio"> Transaction Date</h5>
+                <label>from</label>
+                <input type="date" data-date-inline-picker="false"
+                       data-date-popover='{"inline": true}' />
+                <label>to</label>
+                <input type="date" data-date-inline-picker="false"
+                       data-date-popover='{"inline": true}' />
+
+                <h5> <input type="radio"> Transaction Period</h5>
+                <label>For</label>
+                <input type="date" data-date-inline-picker="false"
+                       data-date-popover='{"inline": true}' />
+            </p>
+            <p>
+                <label for="report_format">Dispaly Format:</label>
+                <select id="report_format">
+                    <option>CSV Format</option>
+                    <option>PDF Format</option>
+                    <option>Excel Format</option>
+                    <option>Text Format</option>
+                    <option>On Screen</option>
+                </select>
+            </p>
+
+            <input type="checkbox" name="report" value="">
+            <input type="submit" value="Generate Report">
+        </fieldset>
+    </form>
+</body>
+</html>
