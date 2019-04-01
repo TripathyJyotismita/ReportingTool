@@ -1,9 +1,10 @@
-Enter Login Details:
+{% block title %}Enter Login Details:{% endblock %}
 
+{% block content %}
     <div id="content-container" class="container p-none">
         <div class="lgn-container col-lg-8">
-            <form id="login-form" method="post"
-                  action="{% url 'login' %}">
+            <form id="login-form" method="post" action="{% url 'login' %}">
+                {% csrf_token %}
                 <table class="table">
                     <tr>
                         <td><label for="id_username">Username</label></td>
@@ -27,3 +28,4 @@ Enter Login Details:
             </form>
         </div>
     </div>
+{% endblock content %}
