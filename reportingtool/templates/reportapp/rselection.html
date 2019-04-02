@@ -5,12 +5,12 @@
     <title>Report Generation</title>
 </head>
     <h1>Welcome to Report Generation Tool</h1>
-    <form method="post" action="/Tests/Post/">
+    <form method="POST" action="{% url 'data_input' %}" enctype="multipart/form-data">
         <fieldset>
             <legend>Enter details to generate report: </legend>
             <p>
                 <label> Customer Name/SID:</label>
-                <input type="text" id="myText" value=" " > <br>
+                <input type="text" id="myCustomer"  name="cname" value="Add" > <br>
             </p>
             <p>
                 <h3> Filter by:</h3>
@@ -37,9 +37,8 @@
                     <option>On Screen</option>
                 </select>
             </p>
-
-            <input type="checkbox" name="report" value="">
-            <input type="submit" value="Generate Report">
+            <input type="submit" class="btn btn-default" value="Submit">
+            <input type="reset" value="Reset" />
         </fieldset>
     </form>
 </body>

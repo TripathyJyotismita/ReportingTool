@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template import loader
-
+from django.http import HttpResponse
 from django import get_version
 print(get_version)
 
@@ -9,6 +9,8 @@ from django.http import HttpResponse
 import datetime
 import cx_Oracle
 
+def index(request):
+    return render(request,'reportapp/index.html', {'content':['Homepage']})
 def dbConnection():
     print("Calling DBCONNECTION")
     CONN_INFO = {
@@ -38,12 +40,16 @@ def home(request):
     html = t.render(Context({'current_date': now}))
     return HttpResponse(html)
 
-def hello(request):
-    return HttpResponse('<h1>hello!!</h1>')
 
 def login(request):
+    print(request.method)
     #return HttpResponse('<h1>Welcome to Login page!!</h1>')
     return render(request, 'reportapp/login.html')
 
-def process_request(request):
-    return render(request, "reportapp/rselection.html")
+def input_data(request):
+    if request.method == "GET":
+        return render(request, "reportapp/input_data.html")
+    elif request.method == "POST":
+        c_name= request.POST.get("c_name")
+        print(c_name)
+        return HttpResponse("Enter the POP UP report template here")

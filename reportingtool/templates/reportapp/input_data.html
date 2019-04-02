@@ -1,0 +1,20 @@
+<h1>Welcome to Report Generation Tool</h1>
+<h2>Enter Login Details:</h2>
+
+    <div id="content-container" class="container p-none">
+        <div class="lgn-container col-lg-8">
+            <form id="form" method="post" action="{% url 'input_data' %}">{% csrf_token %}
+                <table class="table">
+                    <tr>
+                        <td><label for="c_name">CustomerName/SID</label></td>
+                        <td><input id="c_name" name="cname"
+                                   type="text" class="form-control"></td>
+                    </tr>
+                </table>
+
+                <input type="submit" value="Login"
+                       class="btn btn-primary pull-right" />
+                <input type="hidden" name="next" value="{{ next }}" />
+            </form>
+        </div>
+    </div>
