@@ -44,3 +44,6 @@ def hello(request):
 def login(request):
     #return HttpResponse('<h1>Welcome to Login page!!</h1>')
     return render(request, 'reportapp/login.html')
+
+def process_request(request):
+    return render(request, "reportapp/rselection.html")
