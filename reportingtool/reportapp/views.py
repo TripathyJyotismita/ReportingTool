@@ -43,13 +43,22 @@ def home(request):
 
 def login(request):
     print(request.method)
+    print("**********Inside login post***********")
     #return HttpResponse('<h1>Welcome to Login page!!</h1>')
+    uname=request.POST.get("id_username")
+    passwd=request.POST.get("id_password")
+    print(uname)
+    print(passwd)
     return render(request, 'reportapp/login.html')
 
 def input_data(request):
+    print ('**************')
     if request.method == "GET":
+        print("*"*10)
         return render(request, "reportapp/input_data.html")
     elif request.method == "POST":
+        #import pdb
+        #pdb.set_trace()
         c_name= request.POST.get("c_name")
         print(c_name)
         return HttpResponse("Enter the POP UP report template here")
