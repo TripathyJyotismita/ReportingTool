@@ -5,7 +5,8 @@
     <title>Report Generation</title>
 </head>
     <h1>Welcome to Report Generation Tool</h1>
-    <form method="POST" action="{% url 'data_input' %}" enctype="multipart/form-data">
+    <form method="POST" action="{% url 'input_data' %}" enctype="multipart/form-data">
+        {% csrf_token %}
         <fieldset>
             <legend>Enter details to generate report: </legend>
             <p>

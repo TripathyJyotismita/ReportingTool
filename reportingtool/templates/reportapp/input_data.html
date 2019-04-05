@@ -1,20 +1,58 @@
 <h1>Welcome to Report Generation Tool</h1>
-<h2>Enter Login Details:</h2>
 
     <div id="content-container" class="container p-none">
         <div class="lgn-container col-lg-8">
-            <form id="form" method="post" action="{% url 'input_data' %}">{% csrf_token %}
+            <form id="login-form" method="post" action="{% url 'input_data' %}"> {% csrf_token %}
+                <fieldset>
+                    <legend>Enter details to generate report:</legend>
                 <table class="table">
                     <tr>
-                        <td><label>CustomerName/SID</label></td>
+                        <td><label>Customer name/SID</label></td>
                         <td><input id="c_name" name="c_name"
                                    type="text" class="form-control"></td>
                     </tr>
-                </table>
 
-                <input type="submit" value="Login"
+                </table>
+                    <p>
+                    <fieldset>
+                <h3> Filter by:</h3>
+                <h5> <input type="radio"> Transaction Date</h5>
+                <label>from</label>
+                <input id="from_date" name="from_date"
+                       type="date" data-date-inline-picker="false"
+                       data-date-popover='{"inline": true}' />
+                <label>to</label>
+                <input id="to_date" name="to_date"
+                       type="date" data-date-inline-picker="false"
+                       data-date-popover='{"inline": true}' />
+
+                <h5> <input type="radio"> Transaction Period</h5>
+                <label>For</label>
+                <input id="tp" name="tp"
+                       type="date" data-date-inline-picker="false"
+                       data-date-popover='{"inline": true}' />
+                    </fieldset>
+                </p>
+                    <p>
+                <h5 for="report_format">Dispaly Format:</h5>
+                <select id="report_format" name="report_format">
+                    <option>CSV Format</option>
+                    <option>PDF Format</option>
+                    <option>Excel Format</option>
+                    <option>Text Format</option>
+                    <option>On Screen</option>
+                </select>
+            </p>
+                    <p class=" label label-danger">
+                        Note: Report will be downloaded on the systesm if you select CSV/PDF/EXCEL/TEXT format.
+                    </p>
+
+                <input type="submit" value="Generate Report"
+                       class="btn btn-primary pull-right" />
+                    <input type="submit" value="Reset"
                        class="btn btn-primary pull-right" />
                 <input type="hidden" name="next" value="{{ next }}" />
+                </fieldset>
             </form>
         </div>
     </div>
