@@ -2,12 +2,16 @@ from django.shortcuts import render, redirect
 from django.template import loader
 from django.http import HttpResponse
 from django import get_version
+import csv,xlwt,xlsxwriter,sys
 print(get_version)
 
 from django.template import Template, Context
 from django.http import HttpResponse
 import datetime
 import cx_Oracle
+from fpdf import FPDF
+from os import path
+import os
 
 def index(request):
     return render(request,'reportapp/index.html', {'content':['Homepage']})
@@ -23,8 +27,8 @@ def db_fun():
     }
     CONN_STR = '{user}/{psw}@{host}:{port}/{service}'.format(**CONN_INFO)
     c_name='null'
-    query= """select ORDER_ID,CNAME from %s.dcsp_order where CNAME='ZCP' """ %(CONN_INFO['user'] )
-
+    #query= """select ORDER_ID,CNAME from %s.dcsp_order where CNAME=%s AND ORDER_ID='o10275' """ % ((CONN_INFO['user']),'ZCP')
+    query = """select ORDER_ID,CNAME from %s.dcsp_order where CNAME='ZCP' AND ORDER_ID='o10275' """ % ((CONN_INFO['user']))
     try:
         #con = cx_Oracle.connect('system/0racleDB@127.0.0.1:1521/orcl.oradev.oraclecorp.com')
         con = cx_Oracle.connect(CONN_STR)
@@ -39,9 +43,82 @@ def db_fun():
         return result
     finally:
         con.close()
-
-
 print(db_fun())
+
+def generate_pdf():
+    spacing=2
+    title = 'Order Report for Customers'
+    pdf = FPDF(format='letter', unit='in')
+    pdf.add_page()
+    pdf.set_font('Arial', '', 10.0)
+
+    epw = pdf.w - 4 * pdf.l_margin
+    col_width = epw / 5
+    data = [['Date', 'Customer Name', 'No of Orders', 'Submitted Orders', 'Incomplete Orders'],
+            ['04-08-19', 'ZCP', '57', '15', '35'],
+            ['04-08-19', 'ZCP', '59', '32', '23'],
+            ['04-08-19', 'ZCP', '88', '28', '21']
+            ]
+
+    pdf.set_font('Arial', 'B', 14.0)
+    # pdf.cell(w, h = 0, txt = '', border = 0, ln = 0, align = '', fill = False, link = '')
+    pdf.cell(epw, 1.0, 'Order Report', align='C')
+    pdf.set_font('Arial', '', 10.0)
+    pdf.ln(1)
+    row_h = pdf.font_size
+    th=row_h*spacing
+    for row in data:
+        print(row)
+        for datum in row:
+            print(datum)
+            pdf.cell(col_width, th, str(datum), border=1, align='C')
+        pdf.ln(th)
+
+    # pdf.ln(5*th)
+
+    pdf.output('order_report ' + datetime.datetime.now().strftime("%Y-%m-%d") + '.pdf', 'F')
+generate_pdf()
+
+def generate_csv():
+    #handle = open(sys.argv[1])
+    data = [['Date', 'Customer Name', 'No of Orders', 'Submitted Orders', 'Incomplete Orders'],
+            ['04-08-19', 'ZCP', '57', '15', '35'],
+            ['04-08-19', 'ZCP', '59', '32', '23'],
+            ['04-08-19', 'ZCP', '88', '28', '21']
+            ]
+    with open (('order_report ' + datetime.datetime.now().strftime("%Y-%m-%d") + '.csv'), 'w') as fp:
+        writer=csv.writer(fp,delimiter=',')
+        writer.writerow(['Date', 'Customer Name', 'No of Orders', 'Submitted Orders', 'Incomplete Orders'])
+        for row in data:
+            writer.writerow(row)
+
+generate_csv()
+
+def generate_excel():
+    wb=xlsxwriter.Workbook('order_report ' + datetime.datetime.now().strftime("%Y-%m-%d") + '.xlsx')
+    ws=wb.add_worksheet()
+    row = 0
+    column =0
+    data = (['Date', 'Customer Name', 'No of Orders', 'Submitted Orders', 'Incomplete Orders'],
+            ['04-08-19', 'ZCP', '57', '15', '35'],
+            ['04-08-19', 'ZCP', '59', '32', '23'],
+            ['04-08-19', 'ZCP', '88', '28', '21']
+            )
+    for date,cname,no,so,io in data:
+        #ws.write(row,column,item)
+        ws.write(row, column,date)
+        ws.write(row, column+1,cname)
+        ws.write(row, column + 2, no)
+        ws.write(row, column + 3, so)
+        ws.write(row, column + 4, io)
+        row+=1
+    wb.close()
+generate_excel()
+
+
+
+
+
 
 def home(request):
     now = datetime.datetime.now()
@@ -81,4 +158,5 @@ def input_data(request):
         tp = request.POST.get("tp")
         print(tp)
         report_format = request.POST.get("report_format")
+        print(report_format)
         return HttpResponse("Enter the POP UP report template here")
