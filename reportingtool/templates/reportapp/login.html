@@ -1,31 +1,17 @@
-<h1>Welcome to Report Generation Tool</h1>
-<h2>Enter Login Details:</h2>
-
-    <div id="content-container" class="container p-none">
-        <div class="lgn-container col-lg-8">
-            <form id="login-form" method="post" action="{% url 'login' %}"> {% csrf_token %}
-                <fieldset>
-                <table class="table">
-                    <tr>
-                        <td><label>Username</label></td>
-                        <td><input id="id_username" name="id_username"
-                                   type="text" class="form-control"></td>
-                    </tr>
-                    <tr>
-                        <td><label>Password</label></td>
-                        <td><input id="id_password" name="id_password"
-                                   type="password" class="form-control"></td>
-                    </tr>
-                </table>
-                    <p class=" label label-danger">
-                        Your username and password didn't match.
-                        Please try again.
-                    </p>
-
-                <input type="submit" value="Login"
-                       class="btn btn-primary pull-right" />
-                <input type="hidden" name="next" value="{{ next }}" />
-                </fieldset>
-            </form>
-        </div>
+{% extends 'templates/reportapp/base.html' %}
+{% block body_block %}
+  <div class="container">
+    <div class="jumbotron">
+        <h1>Login here :</h1>
+    <form method="post" action="{% url 'user_login' %}">
+          {% csrf_token %}
+          {# A more "HTML" way of creating the login form#}
+          <label for="username">Username:</label>
+          <input type="text" name="username" placeholder="Username">
+          <label for="password">Password:</label>
+          <input type="password" name="password" placeholder="Password">
+          <input type="submit" name="" value="Login">
+    </form>
     </div>
+  </div>
+{% endblock %}

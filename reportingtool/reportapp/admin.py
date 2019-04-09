@@ -1,4 +1,5 @@
 from django.contrib import admin
-from reportingtool.reportapp.models  import UserProfileInfo, User
+from.models import UserProfileInfo
+from .models import User
 # Register your models here.
 admin.site.register(UserProfileInfo)
