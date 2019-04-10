@@ -11,6 +11,7 @@
           <label for="password">Password:</label>
           <input type="password" name="password" placeholder="Password">
           <input type="submit" name="" value="Login">
+          <input type="hidden" name="next" value="{{ request.GET.next }}"/>
     </form>
     </div>
   </div>

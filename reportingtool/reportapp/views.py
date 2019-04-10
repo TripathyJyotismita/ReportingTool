@@ -1,7 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
+from django.contrib.auth.decorators import login_required
 from django.template import loader
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, logout
+from django.contrib.auth import login as auth_login
+from django.contrib import messages
+from django.template import RequestContext
 from django import get_version
 import csv,xlwt,xlsxwriter,sys
 print(get_version)
@@ -78,7 +82,7 @@ def generate_pdf():
     # pdf.ln(5*th)
 
     pdf.output('order_report ' + datetime.datetime.now().strftime("%Y-%m-%d") + '.pdf', 'F')
-generate_pdf()
+#generate_pdf()
 
 def generate_csv():
     #handle = open(sys.argv[1])
@@ -93,7 +97,7 @@ def generate_csv():
         for row in data:
             writer.writerow(row)
 
-generate_csv()
+#generate_csv()
 
 def generate_excel():
     wb=xlsxwriter.Workbook('order_report ' + datetime.datetime.now().strftime("%Y-%m-%d") + '.xlsx')
@@ -128,6 +132,7 @@ def home(request):
     return HttpResponse(html)
 global uname
 
+@login_required
 def login(request):
     if request.method == 'POST':
         print(request.method)
@@ -140,10 +145,19 @@ def login(request):
         user = authenticate(username=u_name, password=passwd)
         if user:
             if user.is_active:
-                login(request,user)
-                return HttpResponse("You are logged in")
+                auth_login(request,user)
+                messages.success(request, "You have logged in!")
+                #return HttpResponse("You are logged in")
+                #return redirect('reportapp/input_data.html')
+                #return render_to_response('reportapp/input_data.html')
+                # redirect_to = settings.LOGIN_REDIRECT_URL
+                return render(request, 'reportapp/input_data.html', context={'username': u_name})
+                # return HttpResponse("You are logged in")
+                #return redirect('reportapp/input_data.html')
+                # return render_to_response('reportapp/input_data.html')
             else:
-                return HttpResponse("Your account is inactive!")
+                messages.warning("Your account is inactive!")
+                return redirect('/login')
 
         else:
             print("Someone tried to login and failed.")
@@ -155,6 +169,20 @@ def login(request):
 #print(input_string)
 
 def input_data(request):
+    indata=False
+    c_name = request.POST.get("c_name")
+    from_date = request.POST.get("from_date")
+    print(from_date)
+    to_date = request.POST.get("to_date")
+    print(to_date)
+    tp = request.POST.get("tp")
+    print(tp)
+    report_format = request.POST.get("report_format")
+    print(report_format)
+    return HttpResponse("Enter the POP UP report template here1111111111")
+
+
+def input_data1(request):
         print('******Inside input_data GET method********')
         if request.method == "GET":
             print("*"*10)
