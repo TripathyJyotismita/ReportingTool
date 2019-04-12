@@ -6,6 +6,7 @@ urlpatterns = [
     #url('', views.home, name='report-home'),
     url(r'login/$', views.login, name='login'),
     #url(r'report/$', views.process_request, name='report'),
-    #url(r'home', views.index, name='home'),
-    url(r'input_data/$', views.input_data, name='input_data')
+    url(r'file', views.csv_view, name='file'),
+    url(r'input_data/$', views.input_data, name='input_data'),
+
 ]

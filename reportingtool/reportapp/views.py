@@ -5,12 +5,11 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as auth_login
 from django.contrib import messages
-from django.template import RequestContext
 from django import get_version
 import csv,xlwt,xlsxwriter,sys
 print(get_version)
 
-from django.template import Template, Context
+from django.template import Template, Context, loader, RequestContext
 from django.http import HttpResponse
 import datetime
 import cx_Oracle
@@ -18,11 +17,30 @@ from fpdf import FPDF
 from os import path
 import os
 
+from django.http import StreamingHttpResponse
+
+
+def csv_view(result):
+    print("view that streams a large CSV file.")
+    # Generate a sequence of rows. The range is based on the maximum number of
+    # rows that can be handled by a single sheet in most spreadsheet
+    # applications.
+    #rows = (["Row {}".format(idx), str(idx)] for idx in range(65536))
+    response=HttpResponse(content_type="text/csv")
+    fn = 'order_report ' + datetime.datetime.now().strftime("%Y-%m-%d") + '.csv'
+    response['Content-Disposition'] = 'attachment; filename={0}'.format(fn)
+
+    headers=['Date', 'CustomerName', 'No of Orders', 'Submitted Orders', 'Incomplete Orders']
+    writer = csv.writer(response, delimiter=',')
+    writer.writerow(i for i in headers)
+
+    return response
+
 def index(request):
     return render(request,'reportapp/index.html', {'content':['Homepage']})
 
 
-def db_fun():
+def db_fun(c_name,from_date,to_date,report_format):
     CONN_INFO = {
         'host': '127.0.0.1',
         'port': 1521,
@@ -31,26 +49,39 @@ def db_fun():
         'service': 'orcl.oradev.oraclecorp.com'
     }
     CONN_STR = '{user}/{psw}@{host}:{port}/{service}'.format(**CONN_INFO)
-    c_name='null'
     #query= """select ORDER_ID,CNAME from %s.dcsp_order where CNAME=%s AND ORDER_ID='o10275' """ % ((CONN_INFO['user']),'ZCP')
-    query = """select ORDER_ID,CNAME from %s.dcsp_order where CNAME='ZCP' AND ORDER_ID='o10275' """ % ((CONN_INFO['user']))
+    #query = """select ORDER_ID,CNAME from {0}.dcsp_order where CNAME={1} """.format((CONN_INFO['user']),c_name)
+    query = "select * from SYSTEM.dcsp_order where 1=:CNAME "
     try:
+        print("inside before db call"+c_name)
         #con = cx_Oracle.connect('system/0racleDB@127.0.0.1:1521/orcl.oradev.oraclecorp.com')
         con = cx_Oracle.connect(CONN_STR)
         # conn = cx_Oracle.connect(con)
         cur = con.cursor()
         print(con.version)
-        cur.execute(query)
+        print(query)
+        cur.execute(query, str(c_name))
         # cur.execute('select count(table_name) from ALL_TABLES')
         result = (cur.fetchall())
         cur.close()
 
-        return result
+        print(result)
+
     finally:
         con.close()
-print(db_fun())
 
-def generate_pdf():
+    if report_format == 'CSV':
+        #print("roportformat is:" + report_format)
+        #enerate_csv(result)
+        csv_view(result)
+    elif report_format == 'PDF':
+        generate_pdf(result)
+    elif report_format == 'EXCEL':
+        generate_excel(result)
+#db_fun()
+
+def generate_pdf(result):
+    print(result)
     spacing=2
     title = 'Order Report for Customers'
     pdf = FPDF(format='letter', unit='in')
@@ -73,9 +104,7 @@ def generate_pdf():
     row_h = pdf.font_size
     th=row_h*spacing
     for row in data:
-        print(row)
         for datum in row:
-            print(datum)
             pdf.cell(col_width, th, str(datum), border=1, align='C')
         pdf.ln(th)
 
@@ -84,22 +113,24 @@ def generate_pdf():
     pdf.output('order_report ' + datetime.datetime.now().strftime("%Y-%m-%d") + '.pdf', 'F')
 #generate_pdf()
 
-def generate_csv():
+def generate_csv(result):
+    print("IN GENRATE CSV**********")
     #handle = open(sys.argv[1])
     data = [['Date', 'Customer Name', 'No of Orders', 'Submitted Orders', 'Incomplete Orders'],
             ['04-08-19', 'ZCP', '57', '15', '35'],
             ['04-08-19', 'ZCP', '59', '32', '23'],
             ['04-08-19', 'ZCP', '88', '28', '21']
             ]
+
     with open(('order_report ' + datetime.datetime.now().strftime("%Y-%m-%d") + '.csv'), 'w') as fp:
-        writer=csv.writer(fp,delimiter=',')
-        writer.writerow(['Date', 'Customer Name', 'No of Orders', 'Submitted Orders', 'Incomplete Orders'])
-        for row in data:
-            writer.writerow(row)
+            writer=csv.writer(fp,delimiter=',')
+            writer.writerow(['Date', 'Customer Name', 'No of Orders', 'Submitted Orders', 'Incomplete Orders'])
+            for row in data:
+                writer.writerow(row)
 
 #generate_csv()
 
-def generate_excel():
+def generate_excel(result):
     wb=xlsxwriter.Workbook('order_report ' + datetime.datetime.now().strftime("%Y-%m-%d") + '.xlsx')
     ws=wb.add_worksheet()
     row = 0
@@ -167,39 +198,17 @@ def login(request):
         return render(request, 'reportapp/login_report.html')
 #input_string={'uname':login.u_name}
 #print(input_string)
+input_format=['CSV']
+
+
 
 def input_data(request):
-    indata=False
     c_name = request.POST.get("c_name")
     from_date = request.POST.get("from_date")
-    print(from_date)
     to_date = request.POST.get("to_date")
-    print(to_date)
     tp = request.POST.get("tp")
-    print(tp)
     report_format = request.POST.get("report_format")
-    print(report_format)
-    return HttpResponse("Enter the POP UP report template here1111111111")
+    print("IN INPUT_DATA-"+report_format)
+    db_fun(c_name,from_date,to_date,report_format)
+    return HttpResponse("Report downloaded in your machine!")
 
-
-def input_data1(request):
-        print('******Inside input_data GET method********')
-        if request.method == "GET":
-            print("*"*10)
-            return render(request, "reportapp/input_data.html")
-            #return render(request, "reportapp/rselection.html")
-        elif request.method == "POST":
-            input_string=""
-            #import pdb
-            #pdb.set_trace()
-            c_name = request.POST.get("c_name")
-            print(c_name)
-            from_date = request.POST.get("from_date")
-            print(from_date)
-            to_date = request.POST.get("to_date")
-            print(to_date)
-            tp = request.POST.get("tp")
-            print(tp)
-            report_format = request.POST.get("report_format")
-            print(report_format)
-            return HttpResponse("Enter the POP UP report template here")
