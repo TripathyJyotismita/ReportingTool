@@ -46,7 +46,8 @@
 
                 <h5> <input type="radio"> Transaction Date</h5>
                 <label for="for_date">For Day</label>
-                <input id="tp" name="tp"
+                <input id="for_date" name="for_date" value="<%= Time.now.strftime('%Y-%m-%d %H:%M') %>"
+                       min="1914-12-20 08:00" max="3000-12-20 08:00"
                        type="datetime-local" data-date-inline-picker="false"
                        data-date-popover='{"inline": true}'/>
                     <select name="timezone_offset" id="timezone-offset" class="span5">

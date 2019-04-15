@@ -45,7 +45,7 @@ def index(request):
     return render(request,'reportapp/index.html', {'content':['Homepage']})
 
 
-def db_fun(c_name,from_date,to_date,report_format,tp):
+def db_fun(c_name,from_date,to_date,report_format,for_date):
     CONN_INFO = {
         'host': '127.0.0.1',
         'port': 1521,
@@ -63,6 +63,8 @@ def db_fun(c_name,from_date,to_date,report_format,tp):
     print(to_date_obj)
     delta = to_date_obj-date_time_obj
     print(delta.days)
+    for_date_obj = datetime.datetime.strptime(for_date, "%Y-%m-%dT%H:%M")
+    print(for_date_obj)
 
     CONN_STR = '{user}/{psw}@{host}:{port}/{service}'.format(**CONN_INFO)
     query= """select ORDER_ID,CNAME from %s.dcsp_order where CNAME='%s' AND ORDER_ID='o10275' """ % ((CONN_INFO['user']),c_name)
@@ -223,9 +225,9 @@ def input_data(request):
     c_name = request.POST.get("c_name")
     from_date = request.POST.get("from_date")
     to_date = request.POST.get("to_date")
-    tp = request.POST.get("tp")
+    for_date = request.POST.get("for_date")
     report_format = request.POST.get("report_format")
     print("IN INPUT_DATA-"+report_format)
-    db_fun(c_name,from_date,to_date,report_format,tp)
+    db_fun(c_name,from_date,to_date,report_format,for_date)
     return HttpResponse("Report downloaded in your machine!")
 
