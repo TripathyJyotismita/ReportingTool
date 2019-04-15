@@ -7,30 +7,52 @@
                     <legend>Enter details to generate report:</legend>
                 <table class="table">
                     <tr>
-                        <td><label>Customer name/SID</label></td>
-                        <td><input id="c_name" name="c_name"
-                                   type="text" class="form-control"></td>
+                        <h5 for="c_name">Customer name/SID</h5>
+                        <select id="c_name" name="c_name" type="text" class="form-control">
+                        <option value="ATS"> ATS</option>
+                        <option value="ATS_Admin"> ATS Admin</option>
+                        <option value="Air_born">AirBorn</option>
+                            <option value="Air_born_admin">AirBorn Admin</option>
+                        <option value="Alpha_Industries">Alpha Industries</option>
+                            <option VALUE="ZCP"> ZCP</option
+                    </select>
                     </tr>
 
                 </table>
                     <p>
                     <fieldset>
                 <h3> Filter by:</h3>
-                <h5> <input type="radio"> Transaction Date</h5>
-                <label>from</label>
-                <input id="from_date" name="from_date"
-                       type="date" data-date-inline-picker="false"
-                       data-date-popover='{"inline": true}' />
-                <label>to</label>
-                <input id="to_date" name="to_date"
-                       type="date" data-date-inline-picker="false"
-                       data-date-popover='{"inline": true}' />
-
                 <h5> <input type="radio"> Transaction Period</h5>
-                <label>For</label>
-                <input id="tp" name="tp"
-                       type="date" data-date-inline-picker="false"
+                    <label for="from_date">From</label>
+                    <input type="datetime-local" id="from_date" name="from_date" value="2015-06-12T19:30"
+                            min="2010-01-01T00:00" max="2029-01-14T00:00"
+                            data-date-inline-picker="false"
+                            data-date-popover='{"inline": true}'>
+                        <select name="timezone_offset" id="timezone-offset" class="span5">
+                            <option value="EDT">(GMT -4:00)</option>
+                            <option value="EST">(GMT -5:00)</option>
+                        </select>
+
+
+                <label for="to_date">To</label>
+                <input id="to_date" name="to_date" value="2015-06-12T19:30"
+                       min="2010-01-01T00:00" max="2029-01-14T00:00"
+                       type="datetime-local" data-date-inline-picker="false"
                        data-date-popover='{"inline": true}' />
+                        <select name="timezone_offset"  class="span5">
+                            <option value="EDT">(GMT -4:00)</option>
+                            <option value="EST">(GMT -5:00)</option>
+                        </select>
+
+                <h5> <input type="radio"> Transaction Date</h5>
+                <label for="for_date">For Day</label>
+                <input id="tp" name="tp"
+                       type="datetime-local" data-date-inline-picker="false"
+                       data-date-popover='{"inline": true}'/>
+                    <select name="timezone_offset" id="timezone-offset" class="span5">
+                        <option value="EDT">(GMT -4:00)</option>
+                        <option value="EST">(GMT -5:00)</option>
+                    </select>
                     </fieldset>
                 </p>
                     <p>

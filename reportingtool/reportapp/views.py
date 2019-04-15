@@ -19,6 +19,11 @@ import os
 
 from django.http import StreamingHttpResponse
 
+import datetime as dt
+
+dtime = dt.datetime.now()
+print(dtime)
+print(dtime.tzinfo)
 
 def csv_view(result):
     print("view that streams a large CSV file.")
@@ -40,7 +45,7 @@ def index(request):
     return render(request,'reportapp/index.html', {'content':['Homepage']})
 
 
-def db_fun(c_name,from_date,to_date,report_format):
+def db_fun(c_name,from_date,to_date,report_format,tp):
     CONN_INFO = {
         'host': '127.0.0.1',
         'port': 1521,
@@ -48,10 +53,13 @@ def db_fun(c_name,from_date,to_date,report_format):
         'psw': '0racleDB',
         'service': 'orcl.oradev.oraclecorp.com'
     }
+    print(from_date+'************FROM DATE**************')
+    print(to_date+'**************To Date***************')
+
     CONN_STR = '{user}/{psw}@{host}:{port}/{service}'.format(**CONN_INFO)
-    #query= """select ORDER_ID,CNAME from %s.dcsp_order where CNAME=%s AND ORDER_ID='o10275' """ % ((CONN_INFO['user']),'ZCP')
-    #query = """select ORDER_ID,CNAME from {0}.dcsp_order where CNAME={1} """.format((CONN_INFO['user']),c_name)
-    query = "select * from SYSTEM.dcsp_order where 1=:CNAME "
+    query= """select ORDER_ID,CNAME from %s.dcsp_order where CNAME='%s' AND ORDER_ID='o10275' """ % ((CONN_INFO['user']),c_name)
+    #query = """select ORDER_ID,CNAME from {0}.dcsp_order where CNAME={1} """.format((CONN_INFO['user']),data['cn'])
+    #query = "select * from SYSTEM.dcsp_order where 1=:CNAME "
     try:
         print("inside before db call"+c_name)
         #con = cx_Oracle.connect('system/0racleDB@127.0.0.1:1521/orcl.oradev.oraclecorp.com')
@@ -60,7 +68,8 @@ def db_fun(c_name,from_date,to_date,report_format):
         cur = con.cursor()
         print(con.version)
         print(query)
-        cur.execute(query, str(c_name))
+        cur.execute(query)
+        #cur.execute(query, str(c_name))
         # cur.execute('select count(table_name) from ALL_TABLES')
         result = (cur.fetchall())
         cur.close()
@@ -209,6 +218,6 @@ def input_data(request):
     tp = request.POST.get("tp")
     report_format = request.POST.get("report_format")
     print("IN INPUT_DATA-"+report_format)
-    db_fun(c_name,from_date,to_date,report_format)
+    db_fun(c_name,from_date,to_date,report_format,tp)
     return HttpResponse("Report downloaded in your machine!")
 
