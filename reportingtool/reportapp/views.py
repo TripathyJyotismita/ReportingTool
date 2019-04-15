@@ -55,6 +55,14 @@ def db_fun(c_name,from_date,to_date,report_format,tp):
     }
     print(from_date+'************FROM DATE**************')
     print(to_date+'**************To Date***************')
+    date_time_obj = datetime.datetime.strptime(from_date, "%Y-%m-%dT%H:%M")
+    print('Date:', date_time_obj.date())
+    print('Time:', date_time_obj.time())
+    print('Date-time:', date_time_obj)
+    to_date_obj= datetime.datetime.strptime(to_date, "%Y-%m-%dT%H:%M")
+    print(to_date_obj)
+    delta = to_date_obj-date_time_obj
+    print(delta.days)
 
     CONN_STR = '{user}/{psw}@{host}:{port}/{service}'.format(**CONN_INFO)
     query= """select ORDER_ID,CNAME from %s.dcsp_order where CNAME='%s' AND ORDER_ID='o10275' """ % ((CONN_INFO['user']),c_name)

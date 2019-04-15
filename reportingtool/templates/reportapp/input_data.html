@@ -24,8 +24,8 @@
                 <h3> Filter by:</h3>
                 <h5> <input type="radio"> Transaction Period</h5>
                     <label for="from_date">From</label>
-                    <input type="datetime-local" id="from_date" name="from_date" value="2015-06-12T19:30"
-                            min="2010-01-01T00:00" max="2029-01-14T00:00"
+                    <input type="datetime-local" id="from_date" name="from_date" value="1914-12-20 08:00"
+                            min="1914-12-20 08:00" max="3000-12-20 08:00"
                             data-date-inline-picker="false"
                             data-date-popover='{"inline": true}'>
                         <select name="timezone_offset" id="timezone-offset" class="span5">
@@ -35,9 +35,9 @@
 
 
                 <label for="to_date">To</label>
-                <input id="to_date" name="to_date" value="2015-06-12T19:30"
-                       min="2010-01-01T00:00" max="2029-01-14T00:00"
-                       type="datetime-local" data-date-inline-picker="false"
+                <input type="datetime-local" id="to_date" name="to_date" value="<%= Time.now.strftime('%Y-%m-%d %H:%M') %>"
+                       min="1914-12-20 08:00" max="3000-12-20 08:00"
+                       data-date-inline-picker="false"
                        data-date-popover='{"inline": true}' />
                         <select name="timezone_offset"  class="span5">
                             <option value="EDT">(GMT -4:00)</option>
