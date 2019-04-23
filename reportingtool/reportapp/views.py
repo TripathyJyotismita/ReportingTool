@@ -19,13 +19,50 @@ from django.http import FileResponse
 from reportlab.pdfgen import canvas
 from os import path
 import os
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.platypus import Image, Paragraph, Table
+from reportlab.lib import colors
 
 from django.http import StreamingHttpResponse
 
 import datetime as dt
 
 def login(request):
-    return render(request, 'reportapp/input_data.html')
+    if request.method == 'POST':
+        print("**********Inside login post***********")
+        #return HttpResponse('<h1>Welcome to Login page!!</h1>')
+        u_name=request.POST.get("id_username")
+        passwd=request.POST.get("id_password")
+        #print(u_name)
+        #print(passwd)
+        user = authenticate(username=u_name, password=passwd)
+        if user:
+            if user.is_active:
+                auth_login(request,user)
+                messages.success(request, "You have logged in!")
+                #return HttpResponse("You are logged in")
+                #return redirect('reportapp/input_data.html')
+                #return render_to_response('reportapp/input_data.html')
+                # redirect_to = settings.LOGIN_REDIRECT_URL
+                return render(request, 'reportapp/input_data.html', context={'username': u_name})
+                # return HttpResponse("You are logged in")
+                #return redirect('reportapp/input_data.html')
+                # return render_to_response('reportapp/input_data.html')
+            else:
+                messages.warning("Your account is inactive!")
+                return redirect('/login')
+
+        else:
+            print("Someone tried to login and failed.")
+            print("They used username: {} and password: {}".format(u_name, passwd))
+            return HttpResponse("Invalid login details given")
+    else:
+        return render(request, 'reportapp/login_report.html')
+
+#def login(request):
+ #   return render(request, 'reportapp/input_data.html')
 
 def input_data(request):
     c_name = request.POST.get("c_name")
@@ -43,7 +80,7 @@ def input_data(request):
     }
 
     CONN_STR = '{user}/{psw}@{host}:{port}/{service}'.format(**CONN_INFO)
-    query = """select * from %s.dcsp_order where CNAME='%s'""" % ((CONN_INFO['user']), c_name)
+    query = """select ORDER_ID from %s.dcsp_order where CNAME='%s'""" % ((CONN_INFO['user']), c_name)
     try:
         con = cx_Oracle.connect(CONN_STR)
         cur = con.cursor()
@@ -69,6 +106,46 @@ def input_data(request):
                     writer.writerow(row)
             response['Content-Disposition'] = 'attachment; filename={0}'.format(fn)
         elif report_format =="PDF":
+            spacing = 2
+            response = HttpResponse(content_type='application/pdf')
+            fn1 = 'order_report ' + datetime.datetime.now().strftime("%Y-%m-%d") + '.pdf'
+            response['Content-Disposition'] = 'attachment; filename={0}'.format(fn1)
+            """data = [['00', '01', '02', '03', '04'],
+                    ['10', '11', '12', '13', '14'],
+                    ['20', '21', '22', '23', '24'],
+                    ['30', '31', '32', '33', '34']]
+            """
+            data= result
+            k=[]
+            for i in data:
+                k.append(list(i))
+            for ele in k:
+                print(type(ele))
+                for c in ele:
+                    print(type(c))
+            print("k is", k)
+            width = A4
+            height = len(result)
+            t = Table(k, 5 ,height)
+            t.setStyle([("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                            ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                            ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black)])
+            print(t)
+
+            p = canvas.Canvas(response)
+            p.setFont("Times-Roman", 55)
+            p.drawString(100, 700, "Order report")
+            t.wrapOn(p)
+            t.drawOn(p, 0*inch, 5*inch)
+
+
+            p.showPage()
+            p.save()
+            #return response
+
+
+
+        """
             print(report_format)
             print("THIS IS INSIDE PDF @@@@@@@@@@@@@@@")
             response = HttpResponse(content_type="application/pdf")
@@ -107,6 +184,7 @@ def input_data(request):
             fn1 = 'order_report ' + datetime.datetime.now().strftime("%Y-%m-%d") + '.pdf'
             pdf.output(fn1, 'F')
             response['Content-Disposition'] = 'attachment; filename={0}'.format(fn1)
+            """
     finally:
         con.close()
 
