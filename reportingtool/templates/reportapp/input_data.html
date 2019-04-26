@@ -1,100 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CustomerInputpage</title>
+</head>
 <h1>Welcome to Report Generation Tool</h1>
 
-    <div id="content-container" class="container p-none">
+<script>
+    function check(){
+        if (document.getElementById("Transactionp").checked == false &
+            document.getElementById("TransactionDate").checked == false) {alert("Enter Transaction period/date")}}
+</script>
+<body>
+<div id="content-container" class="container p-none">
         <div class="lgn-container col-lg-8">
             <form id="login-form" method="post" action="{% url 'input_data' %}"> {% csrf_token %}
                 <fieldset>
                     <legend>Enter details to generate report:</legend>
-                <table class="table">
-                    <tr>
+                    <table class="table">
+                        <tr>
                         <h5 for="c_name">Customer name/SID</h5>
                         <select id="c_name" name="c_name" type="text" class="form-control">
-                        <option value="ATS"> ATS</option>
-                        <option value="ATS_Admin"> ATS Admin</option>
-                        <option value="Air_born">AirBorn</option>
-                            <option value="Air_born_admin">AirBorn Admin</option>
-                        <option value="Alpha_Industries">Alpha Industries</option>
-                            <option VALUE="ZCP"> ZCP</option
-                    </select>
-                    </tr>
-
-                </table>
+                            <option value="ATS"> ATS</option>
+                            <option value="ZCP"> ATS Admin</option>
+                            <option value="Air_born">AirBorn</option>
+                        </select>
+                        </tr>
+                    </table>
                     <p>
-                    <fieldset>
-                    <form action="" method="post">
-                <h3> Filter by:</h3>
-                        <h5><label for="Transactionp">
-                            <input type="radio" name="Transaction" value="Transactionp" id="Transactionp"> Transaction Period</label>
+                        <form action="" method="post">
+                        <h3> Filter by:</h3>
+                        <h5>
+                            <label for="Transactionp"><input type="radio" name="Transaction" value="Transactionp"
+                                                             id="Transactionp"> Transaction Period</label>
                         </h5>
                         <label for="from_date">From</label>
                         <input type="datetime-local" id="from_date" name="from_date" value="1914-12-20 08:00"
-                            min="1914-12-20 08:00" max="5000-12-20 08:00"
-                            data-date-inline-picker="false"
-                            data-date-popover='{"inline": true}'>
+                               min="1914-12-20 08:00" max="5000-12-20 08:00"
+                               data-date-inline-picker="false"
+                               data-date-popover='{"inline": true}'>
                         <select name="timezone_offset" id="timezone-offset" class="span5">
                             <option value="EDT">EDT</option>
                             <option value="EST">EST</option>
                         </select>
-
                         <label for="to_date">To</label>
-                        <input type="datetime-local" id="to_date" name="to_date" value="<%= Time.now.strftime('%Y-%m-%d %H:%M') %>"
-                               min="1914-12-20 08:00" max="3000-12-20 08:00"
+                        <input type="datetime-local" id="to_date" name="to_date"
+                               value="<%= Time.now.strftime('%Y-%m-%d %H:%M') %>"
+                               min="0000-00-00 00:00" max="9999-12-31 24:00"
                                data-date-inline-picker="false"
-                               data-date-popover='{"inline": true}' />
+                               data-date-popover='{"inline": true}' >
                         <select name="timezone_offset"  class="span5">
                             <option value="EDT">EDT</option>
                             <option value="EST">EST</option>
                         </select>
-                    </form>
-
+                        </form>
                     <h5>
                         <label for="TransactionDate">
-                            <input type="radio" name="Transaction" value="TransactionDate" id="TransactionDate"> Transaction Date</label>
+                            <input type="radio" name="Transaction" value="TransactionDate" id="TransactionDate">Transaction Date
+                        </label>
                     </h5>
-                <label for="for_date">For Day</label>
-                <input id="for_date" name="for_date" value="<%= Time.now.strftime('%Y-%m-%d %H:%M') %>"
-                       min="1914-12-20 08:00" max="3000-12-20 08:00"
-                       type="datetime-local" data-date-inline-picker="false"
-                       data-date-popover='{"inline": true}'/>
-                    <select name="timezone_offset" id="timezone-offset" class="span5">
-                        <option value="EDT">EDT</option>
-                        <option value="EST">EST</option>
-                    </select>
+                        <label for="for_date">For Day</label>
+                        <!--div class="form-row show-inputbtns"-->
+                        <input id="for_date" name="for_date"
+                                   type="date" data-date-inline-picker="false" data-date-popover='{"inline": true}' />
+                        <!--/div-->
+                        <!--input id="for_date" name="for_date" value="<%= Time.now.strftime('%Y-%m-%d) %>"
+                               type="datetime-local" data-date-inline-picker="false"
+                               data-date-popover='{"inline": true}'-->
+                        <select name="timezone_offset" id="timezone-offset" class="span5">
+                            <option value="EDT">EDT</option>
+                            <option value="EST">EDT</option>
+                        </select>
                     </fieldset>
                 </p>
-                    <p>
-                <h5 for="report_format">Dispaly Format:</h5>
-                <select id="report_format" name="report_format">
-                    <option VALUE="CSV"> CSV Format</option>
-                    <option VALUE="PDF"> PDF Format</option>
-                    <option value="EXCEL"> Excel Format</option>
-                    <option value="TXT">Text Format</option>
-                    <option>On Screen</option>
-                </select>
-            </p>
-                    <p class=" label label-danger">
-                        Note: Report will be downloaded on the systesm if you select CSV/PDF/EXCEL/TEXT format.
-                    </p>
-
-
-                    <input type="submit" value="Generate Report" class="btn btn-primary pull-right" />
+                <p>
+                    <h5 for="report_format">Dispaly Format:</h5>
+                    <select id="report_format" name="report_format">
+                        <option VALUE="CSV"> CSV Format</option>
+                        <option value="EXCEL"> Excel Format</option>
+                        <option value="TXT">Text Format</option>
+                    </select>
+                </p>
+            </form>
+        </div>
+                <p class=" label label-danger">
+                    Note: Report will be downloaded on the systesm if you select CSV/PDF/EXCEL/TEXT format.
+                </p>
+                    <input type="submit" value="Generate Report" class="btn btn-primary pull-right" onclick="check()" />
                     <input type="reset" value="Reset" class="btn btn-primary pull-right" />
                     <input type="hidden" name="next" value="{{ next }}" />
                 </fieldset>
-
-            </form>
-            <script>
-            $("#login-form").on('submit', function(event) {
-            alert("File Downloaded");
-            </script>
-        </div>
     </div>
-    <div>
-        {% if messages %}
-        <!--ul class="messages"-->
-            {% for message in messages %}
-            <p>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
-            {% endfor %}
-        <!--/ul-->
-        {% endif %}
-        </div>
+</body>
+</html>
