@@ -21,11 +21,14 @@
                 </table>
                     <p>
                     <fieldset>
+                    <form action="" method="post">
                 <h3> Filter by:</h3>
-                <h5> <input type="radio"> Transaction Period</h5>
-                    <label for="from_date">From</label>
-                    <input type="datetime-local" id="from_date" name="from_date" value="1914-12-20 08:00"
-                            min="1914-12-20 08:00" max="3000-12-20 08:00"
+                        <h5><label for="Transactionp">
+                            <input type="radio" name="Transaction" value="Transactionp" id="Transactionp"> Transaction Period</label>
+                        </h5>
+                        <label for="from_date">From</label>
+                        <input type="datetime-local" id="from_date" name="from_date" value="1914-12-20 08:00"
+                            min="1914-12-20 08:00" max="5000-12-20 08:00"
                             data-date-inline-picker="false"
                             data-date-popover='{"inline": true}'>
                         <select name="timezone_offset" id="timezone-offset" class="span5">
@@ -33,18 +36,21 @@
                             <option value="EST">EST</option>
                         </select>
 
-
-                <label for="to_date">To</label>
-                <input type="datetime-local" id="to_date" name="to_date" value="<%= Time.now.strftime('%Y-%m-%d %H:%M') %>"
-                       min="1914-12-20 08:00" max="3000-12-20 08:00"
-                       data-date-inline-picker="false"
-                       data-date-popover='{"inline": true}' />
+                        <label for="to_date">To</label>
+                        <input type="datetime-local" id="to_date" name="to_date" value="<%= Time.now.strftime('%Y-%m-%d %H:%M') %>"
+                               min="1914-12-20 08:00" max="3000-12-20 08:00"
+                               data-date-inline-picker="false"
+                               data-date-popover='{"inline": true}' />
                         <select name="timezone_offset"  class="span5">
                             <option value="EDT">EDT</option>
                             <option value="EST">EST</option>
                         </select>
+                    </form>
 
-                <h5> <input type="radio"> Transaction Date</h5>
+                    <h5>
+                        <label for="TransactionDate">
+                            <input type="radio" name="Transaction" value="TransactionDate" id="TransactionDate"> Transaction Date</label>
+                    </h5>
                 <label for="for_date">For Day</label>
                 <input id="for_date" name="for_date" value="<%= Time.now.strftime('%Y-%m-%d %H:%M') %>"
                        min="1914-12-20 08:00" max="3000-12-20 08:00"
@@ -62,7 +68,7 @@
                     <option VALUE="CSV"> CSV Format</option>
                     <option VALUE="PDF"> PDF Format</option>
                     <option value="EXCEL"> Excel Format</option>
-                    <option>Text Format</option>
+                    <option value="TXT">Text Format</option>
                     <option>On Screen</option>
                 </select>
             </p>
@@ -70,12 +76,25 @@
                         Note: Report will be downloaded on the systesm if you select CSV/PDF/EXCEL/TEXT format.
                     </p>
 
-                <input type="submit" value="Generate Report"
-                       class="btn btn-primary pull-right" />
-                    <input type="submit" value="Reset"
-                       class="btn btn-primary pull-right" />
-                <input type="hidden" name="next" value="{{ next }}" />
+
+                    <input type="submit" value="Generate Report" class="btn btn-primary pull-right" />
+                    <input type="reset" value="Reset" class="btn btn-primary pull-right" />
+                    <input type="hidden" name="next" value="{{ next }}" />
                 </fieldset>
+
             </form>
+            <script>
+            $("#login-form").on('submit', function(event) {
+            alert("File Downloaded");
+            </script>
         </div>
     </div>
+    <div>
+        {% if messages %}
+        <!--ul class="messages"-->
+            {% for message in messages %}
+            <p>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+            {% endfor %}
+        <!--/ul-->
+        {% endif %}
+        </div>

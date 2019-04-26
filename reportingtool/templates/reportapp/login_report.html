@@ -1,31 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+</head>
 <h1>Welcome to Report Generation Tool</h1>
 <h2>Enter Login Details:</h2>
-
-    <div id="content-container" class="container p-none">
-        <div class="lgn-container col-lg-8">
-            <form id="login-form" method="post" action="{% url 'login' %}"> {% csrf_token %}
-                <fieldset>
-                <table class="table">
-                    <tr>
-                        <td><label>Username</label></td>
-                        <td><input id="id_username" name="id_username"
-                                   type="text" class="form-control"></td>
-                    </tr>
-                    <tr>
-                        <td><label>Password</label></td>
-                        <td><input id="id_password" name="id_password"
-                                   type="password" class="form-control"></td>
-                    </tr>
-                </table>
-                    <p class=" label label-danger">
-                        Your username and password didn't match.
-                        Please try again.
-                    </p>
-
-                <input type="submit" value="Login"
-                       class="btn btn-primary pull-right" />
-                <input type="hidden" name="next" value="{{ next }}" />
-                </fieldset>
-            </form>
-        </div>
-    </div>
+<script>
+    function showLoginStatus(responseStatus){
+        if(responseStatus == 200){alert("Login success")}
+        else if (responseStatus == 500){alert("Login failed")}}
+</script>
+<body>
+    <form id="login-form" method="post" action="{% url 'login' %}"> {% csrf_token %}
+        <fieldset>
+        <table class="table">
+            <tr><td><label>Username</label></td>
+                <td><input id="id_username" name="id_username" type="text" class="form-control"></td>
+            </tr>
+            <tr>
+                <td><label>Password</label></td>
+                <td><input id="id_password" name="id_password" type="password" class="form-control"></td>
+            </tr>
+        </table>
+        <input type="submit" value="Login" class="btn btn-primary pull-right" />
+        </fieldset>
+    </form>
+    {% if user.is_authenticated %}
+    <script>showLoginStatus(200)</script>
+    <p>hello</p>
+    <p>welcome {{ user.username }}! You are logged-in.</p>
+    <p><a href="/home">Home</a></p>
+    <p><a href="/logout">Logout</a></p>
+    {% elif not user.is_authenticated  %}
+    <script>showLoginStatus(500)</script>
+    <p><a href="/login">Login</a></p>
+    <p><a href="/register">Register</a></p>
+    {% endif %}
+</body>
+</html>
