@@ -1,0 +1,25 @@
+{"CLIENTDETAILS": [{
+	"TENANT_ID": "pz2ea0c0",
+    "CLIENT_NAME": "India Test",
+    "DB_NODES": ["vmatgz2ea006","vmatgz2ea007"],
+    "ADMIN_NODES": "vmatgz2ea001",
+    "AUX_NODES": ["vmatgz2ea002","vmatgz2ea003"],
+    "STORE_NODES": ["vmatgz2ea002","vmatgz2ea003"],
+    "OBIEE_NODE": "vmatgz2ea001",
+    "SSE_NODES": ["vmatgz2ea010","vmatgz2ea011"],
+    "ENDECA_NODES": ["vmatgz2ea001","vmatgz2ea004","vmatgz2ea005"],
+    "LIVE": "NO",
+    "TIER": "SMALL"},
+	{
+    "TENANT_ID": "pz2ea0c0",
+    "CLIENT_NAME": "Laura Ashley",
+    "DB_NODES": "vmatgz2ea006,vmatgz2ea007",
+    "ADMIN_NODES": "vmatgz2ea001",
+    "AUX_NODES": "vmatgz2ea002,vmatgz2ea003",
+    "STORE_NODES": "vmatgz2ea002,vmatgz2ea003",
+    "OBIEE_NODE": "vmatgz2ea001",
+    "SSE_NODES": "vmatgz2ea010,vmatgz2ea011",
+    "ENDECA_NODES": "vmatgz2ea001,vmatgz2ea004,vmatgz2ea005",
+    "LIVE": "NO",
+    "TIER": "SMALL"}]
+}

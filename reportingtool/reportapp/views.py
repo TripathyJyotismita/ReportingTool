@@ -4,8 +4,8 @@ from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
-
-from django.contrib.auth import authenticate, logout
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib import messages
 from django import get_version
@@ -27,48 +27,37 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch, cm
 from reportlab.platypus import Image, Paragraph, Table
 from reportlab.lib import colors
-
-
-from django.http import StreamingHttpResponse
-
 from reportlab.platypus import SimpleDocTemplate, Paragraph, PageBreak, Table,TableStyle
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import mm, inch
-PAGESIZE = (140 * mm, 216 * mm)
-BASE_MARGIN = 5 * mm
-from io import BytesIO
-pdf_buffer = BytesIO()
-my_doc = SimpleDocTemplate(pdf_buffer)
 
-class PdfCreator:
-    def add_page_number(self, canvas, doc):
-        canvas.saveState()
-        canvas.setFont('Times-Roman', 10)
-        page_number_text = "%d" % (doc.page)
-        canvas.drawCentredString(
-            0.75 * inch,
-            0.75 * inch,
-            page_number_text
-        )
-        canvas.restoreState()
-    def get_body_style(self):
-        sample_style_sheet = getSampleStyleSheet()
-        body_style = sample_style_sheet['BodyText']
-        body_style.fontSize = 18
-        return body_style
-    def build_pdf(self):
-        pdf_buffer = BytesIO()
-        my_doc = SimpleDocTemplate(
-            pdf_buffer,
-            pagesize=PAGESIZE,
-            topMargin=BASE_MARGIN,leftMargin=BASE_MARGIN,rightMargin=BASE_MARGIN,
-			bottomMargin=BASE_MARGIN)
-        body_style = self.get_body_style()
-        flowables = [Paragraph("First paragraph", body_style),Paragraph("Second paragraph", body_style)]
-        my_doc.build(flowables,onFirstPage=self.add_page_number,onLaterPages=self.add_page_number,)
-        pdf_value = pdf_buffer.getvalue()
-        pdf_buffer.close()
-        return pdf_value
+import json
+
+
+json_file='''
+{"CLIENTDETAILS": [
+{
+	"TENANT_ID": "pz2ea0c0",
+    "CLIENT_NAME": "India Test",
+    "DB_NODES": ["vmatgz2ea006","vmatgz2ea007"],
+    "ADMIN_NODES": "vmatgz2ea001",
+    "AUX_NODES": ["vmatgz2ea002","vmatgz2ea003"],
+    "STORE_NODES": ["vmatgz2ea002","vmatgz2ea003"],
+    "OBIEE_NODE": "vmatgz2ea001",
+    "SSE_NODES": ["vmatgz2ea010","vmatgz2ea011"],
+    "ENDECA_NODES": ["vmatgz2ea001","vmatgz2ea004","vmatgz2ea005"],
+    "LIVE": "NO",
+    "TIER": "SMALL"}]
+}
+'''
+#data=json.loads(json_file)
+#print(data)
+fp="C:\\Users\\jytripat\\Desktop\\ReportingTool\\reportingtool\\Sample-json-file.json"
+with open (fp, 'r') as f:
+	parsed_json = json.load(f)
+print(parsed_json)
+c_name='ZCP'
+
 
 def login(request):
     if request.method == 'POST':
@@ -95,21 +84,20 @@ def login(request):
             if HttpResponse.status_code == 500:
                 messages.error(request, "You wrong logged !")
 
-
-
-            #return '500'
     else:
 
         form = AuthenticationForm()
     return render(request, 'reportapp/login_report.html')
 
-#def login(request):
- #   return render(request, 'reportapp/input_data.html')
+def logout(request):
+    auth_logout(request)
+    return render(request,"reportapp/logout.html");
 def home(request):
     return render(request,'reportapp/homepage.html')
 
 def input_data(request):
     c_name = request.POST.get("c_name")
+    print(c_name)
     from_date = request.POST.get("from_date")
     to_date = request.POST.get("to_date")
     for_date = request.POST.get("for_date")
@@ -122,9 +110,6 @@ def input_data(request):
         return db_fun(request,c_name,from_date,to_date,report_format)
     else:
         print("TransactionDate is selected!!!!!!!!!!!!!!!!!!!!")
-        #messages.error(request, 'Enter transaction period/date')
-        #return HttpResponseRedirect('reportapp/input_data.html')
-        #return HttpResponse("Please select transaction period/date!")
         return render(request, 'reportapp/transaction_error_page.html')
 
 def db_fun(request,c_name,from_date,to_date,report_format):
@@ -189,68 +174,6 @@ def db_fun(request,c_name,from_date,to_date,report_format):
                     writer.writerow(row)
             response['Content-Disposition'] = 'attachment; filename={0}'.format(fn)
 
-        elif report_format =="PDF":
-            from reportlab.platypus import LongTable, TableStyle, BaseDocTemplate, Frame, PageTemplate
-            doc = BaseDocTemplate(
-                "question.pdf",
-                pagesize=A4,
-                rightMargin=72,
-                leftMargin=72,
-                topMargin=50,
-                bottomMargin=80,
-                showBoundary=False)
-            spacing = 2
-            response = HttpResponse(content_type='application/pdf')
-            fn1 = 'order_report ' + datetime.datetime.now().strftime("%Y-%m-%d") + '.pdf'
-            response['Content-Disposition'] = 'attachment; filename={0}'.format(fn1)
-            """data = [['00', '01', '02', '03', '04'],
-                    ['10', '11', '12', '13', '14'],
-                    ['20', '21', '22', '23', '24'],
-                    ['30', '31', '32', '33', '34']]
-            
-            data = result
-            k = []
-            for i in data:
-                k.append(list(i))
-            for ele in k:
-                print(type(ele))
-                for c in ele:
-                    print(type(c))
-            print("k is", k)
-            
-            width = A4
-            height = len(result)
-            t = Table(data, 5, height)
-            t.setStyle([("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
-                        ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black)])
-            print(t)
-            """
-            elements = []
-            data = [['00', '01', '02', '03', '04'],
-                    ['10', '11', '12', '13', '14'],
-                    ['20', '21', '22', '23', '24'],
-                    ['30', '31', '32', '33', '34']]
-            t = Table(data)
-            t.setStyle(TableStyle([('BACKGROUND', (1, 1), (-2, -2), colors.green),
-                                   ('TEXTCOLOR', (0, 0), (1, -1), colors.red)]))
-            elements.append(t)
-            styles = getSampleStyleSheet()
-            styleN = styles['Normal']
-            frame = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height - 2 * cm, id='normal')
-            template = PageTemplate(id='longtable', frames=frame)
-            doc.addPageTemplates([template])
-
-            doc.build(elements)
-            p = canvas.Canvas(response)
-            p.setFont("Times-Roman", 55)
-            p.drawString(100, 700, "Order report")
-            #t.wrapOn(p, width, height)
-            #t.drawOn(p, 0 * inch, 5 * inch)
-
-            p.showPage()
-            p.save()
-            # return response
     finally:
         con.close()
     #messages.success(request, 'Report has been downloaded!')

@@ -23,6 +23,9 @@
             </tr>
         </table>
         <input type="submit" value="Login" class="btn btn-primary pull-right" />
+            <input type="submit" value="Logout" class="btn btn-primary pull-right" />
+            <!--p><a href="/logout">Logout</a></p-->
+            <a href="/logout/" target="blank"><button type="submit">Logout</button></a>
         </fieldset>
     </form>
     {% if user.is_authenticated %}

@@ -1,12 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Home page</title>
-    <h1>Welcome to the Order Reporting tool!</h1>
+  <!--  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>-->
+    <script type="text/javascript" src="static/data.json"></script>
+	<script type="text/javascript" src="static/input.js"></script>
+    <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script-->
 </head>
+<script>
+    function check(){
+        if (document.getElementById("Transactionp").checked == false &
+            document.getElementById("TransactionDate").checked == false) {alert("Enter Transaction period/date")}}
+</script>
+<h1>Welcome to Report Generation Tool</h1>
 <body>
-    <!--label>Click here to enter customer details to generate report!</label-->
-    <a href="input_data.html" target="blank"><button class='btn btn-default'>Click here to enter customer details to generate report!</button></a>
+    <p>Home page!!</p>
+    <!--select id="Selector" onclick="load();"></select-->
+    <h5 for="c_name">Customer name/SID</h5>
+    <select id="Selector" name="c_name" class="form-control" onclick="load();"></select>
 </body>
 </html>

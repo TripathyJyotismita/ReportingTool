@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CustomerInputpage</title>
+
+    <!--<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>-->
+    <script type="text/javascript" src="/static/data.json"></script>
+	<script type="text/javascript" src="/static/app.js"></script>
 </head>
 <h1>Welcome to Report Generation Tool</h1>
+<!--script src="angular.min.js"></script-->
 
 <script>
     function check(){
         if (document.getElementById("Transactionp").checked == false &
             document.getElementById("TransactionDate").checked == false) {alert("Enter Transaction period/date")}}
 </script>
+<!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="static/input.js"></script-->
+
 <body>
 <div id="content-container" class="container p-none">
         <div class="lgn-container col-lg-8">
@@ -18,11 +26,13 @@
                     <legend>Enter details to generate report:</legend>
                     <table class="table">
                         <tr>
+
                         <h5 for="c_name">Customer name/SID</h5>
-                        <select id="c_name" name="c_name" type="text" class="form-control">
-                            <option value="ATS"> ATS</option>
+                        <select id="Selector" name="c_name" class="form-control" onclick="load();">
+                            <!--select id="Selector" onclick="load();"></select-->
+                            <!--option value="ATS"> ATS</option>
                             <option value="ZCP"> ATS Admin</option>
-                            <option value="Air_born">AirBorn</option>
+                            <option value="Air_born">AirBorn</option-->
                         </select>
                         </tr>
                     </table>
