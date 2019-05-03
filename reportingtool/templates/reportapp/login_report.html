@@ -23,21 +23,20 @@
             </tr>
         </table>
         <input type="submit" value="Login" class="btn btn-primary pull-right" />
-            <input type="submit" value="Logout" class="btn btn-primary pull-right" />
             <!--p><a href="/logout">Logout</a></p-->
-            <a href="/logout/" target="blank"><button type="submit">Logout</button></a>
+            <!--a href="/logout" target="blank"><button type="submit">Logout</button></a-->
         </fieldset>
     </form>
     {% if user.is_authenticated %}
     <script>showLoginStatus(200)</script>
-    <p>hello</p>
-    <p>welcome {{ user.username }}! You are logged-in.</p>
-    <p><a href="/home">Home</a></p>
-    <p><a href="/logout">Logout</a></p>
+    <p>Hello,</p>
+    <p>Welcome {{ user.username }}! You are logged-in.</p>
+    <p><a href="/home">Home</a>
+        <a href="/logout">Logout</a></p>
     {% elif not user.is_authenticated  %}
     <script>showLoginStatus(500)</script>
-    <p><a href="/login">Login</a></p>
-    <p><a href="/register">Register</a></p>
+    <!--p><a href="/login">Login</a></p>
+    <p><a href="/register">Register</a></p-->
     {% endif %}
 </body>
 </html>
