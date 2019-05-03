@@ -1,1 +1,1 @@
-CLIENTDETAILS='[{"TENANT_ID":"pz2ea0c0","CLIENT_NAME" :"India Test"},{"TENANT_ID":"pz2ea0c0","CLIENT_NAME":"Laura Ashley"},{"TENANT_ID":"pz2ea0c0","CLIENT_NAME":"Fab India"},{"TENANT_ID":"pz2ea0c0","CLIENT_NAME":"AT&T"}]'
+CLIENTDETAILS='[{"TENANT_ID":"pz2ea0c0","CLIENT_NAME" :"India Test"},{"TENANT_ID":"pz2ea0c0","CLIENT_NAME":"Laura Ashley"},{"TENANT_ID":"pz2ea0c0","CLIENT_NAME":"Fab India"},{"TENANT_ID":"pz2ea0c0","CLIENT_NAME":"AT&T"}, {"TENANT_ID":"pz2ea02","CLIENT_NAME":"ZCP"}]'
