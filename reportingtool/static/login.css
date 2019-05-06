@@ -1,0 +1,17 @@
+h1 {
+    margin: 0;
+    text-align: center;
+    background-color:RED;
+
+}
+h2 {
+    margin: 5;
+    background-color:#ECF3F3;
+}
+
+html, body {
+    margin: 10;
+    padding: 10;
+
+}
+

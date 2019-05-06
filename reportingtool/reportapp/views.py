@@ -90,7 +90,8 @@ def input_data(request):
         return db_fun(request,c_name,from_date,to_date,report_format)
     else:
         print("TransactionDate is selected!!!!!!!!!!!!!!!!!!!!")
-        return render(request, 'reportapp/transaction_error_page.html')
+        return db_fun(request, c_name, for_date, report_format)
+        #return render(request, 'reportapp/transaction_error_page.html')
 
 def db_fun(request,c_name,from_date,to_date,report_format):
     print("INSIDE DB FUN********************")

@@ -1,8 +1,11 @@
+{% load staticfiles %}
 <html>
 <head>
+
   <!--  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>-->
     <script type="text/javascript" src="static/data.json"></script>
 	<script type="text/javascript" src="static/input.js"></script>
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
     <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script-->
 </head>
 <script>
@@ -11,8 +14,10 @@
             document.getElementById("TransactionDate").checked == false) {alert("Enter Transaction period/date")}}
 </script>
 <h1>Welcome to Report Generation Tool</h1>
+<!--body style="background-color:orange"-->
 <body>
     <p>Home page!!</p>
+    <a href="{% url 'login' %}">Click here to generate report!</a>
     <!--select id="Selector" onclick="load();"></select-->
     <h5 for="c_name">Customer name/SID</h5>
     <select id="Selector" name="c_name" class="form-control" onclick="load();"></select>

@@ -1,0 +1,16 @@
+h1 {
+    margin: 0;
+    text-align: center;
+    background-color:RED;
+
+}
+h5 {
+    margin: 10;
+    background-color:#ECF3F3;
+}
+
+html, body {
+    margin: 30;
+    padding: 30;
+
+}

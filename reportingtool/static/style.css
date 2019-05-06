@@ -1,0 +1,12 @@
+header {
+    background-color: orange;
+}
+
+header h1 {
+    margin: 5;
+}
+
+html, body {
+    margin: 10;
+    padding: 10;
+}
